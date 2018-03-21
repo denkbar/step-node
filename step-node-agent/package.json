@@ -17,14 +17,17 @@
     "nodemon": "^1.12.1"
   },
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.2",
+    "http": "0.0.0",
     "minimist": "^1.2.0",
-    "request": "^2.83.0",
+    "request": "^2.85.0",
     "shelljs": "^0.8.1",
     "underscore": "^1.8.3",
     "unzip2": "^0.2.5",
     "uuid": "^3.1.0"
   },
+  "bundledDependencies": ["body-parser","express","http","minimist","request","shelljs","underscore","unzip2","uuid"],
   "bin": {
     "step-node-agent": "./bin/step-node-agent"
   }
