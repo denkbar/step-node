@@ -6,7 +6,7 @@ exports.Open_Chrome = async (input, output, session) => {
     .build()
 
   session.driver = driver
-  output.send()
+  output.send({ result: 'OK' })
 }
 
 exports.Google_Search = async (input, output, session) => {

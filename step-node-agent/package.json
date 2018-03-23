@@ -1,13 +1,15 @@
 {
   "name": "step-node-agent",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "The official STEP Agent implementation for Node.js",
   "main": "index.js",
   "scripts": {
     "debug": "nodemon --inspect-brk server.js",
     "eslint": "node_modules/.bin/eslint .",
     "precommit": "npm run eslint",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node test/test.js"
+    
   },
   "author": "Jérôme Comte",
   "license": "AGPL-3.0",
