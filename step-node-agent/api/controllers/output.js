@@ -11,9 +11,16 @@ module.exports = function OutputBuilder (callback) {
   }
 
   exports.fail = function (e) {
-    console.log(e)
+    //console.log(e)
     if (e instanceof Error) {
       exports.builder.error = e.message
+      exports.attach(
+        {
+          'name' : 'exception.log',
+          'isDirectory' : false,
+          'description' : 'exception stacktrace from keyword',
+          'hexContent' : Buffer.from(e.stack).toString('base64')
+        })
     } else {
       exports.builder.error = e
     }

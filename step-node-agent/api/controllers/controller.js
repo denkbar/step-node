@@ -1,6 +1,6 @@
 module.exports = function Controller (agentContext, fileManager) {
   let exports = {}
-  
+
   const fs = require('fs');
   const path = require("path");
   const OutputBuilder = require('./output')
@@ -54,29 +54,34 @@ module.exports = function Controller (agentContext, fileManager) {
   }
 
   exports.executeKeyword = async function (keywordName, keywordPackageFile, tokenId, argument, outputBuilder, agentContext) {
-    
-    //const keywordDir = agentContext.properties['keyworddir'];
-    var kwDir = path.resolve(keywordPackageFile+"/keywords");
-    
-    console.log('[Controller] Search keyword file in ' + kwDir + ' for token ' + tokenId)
-    
-    var keywordFunction = searchAndRequireKeyword(kwDir, keywordName);
 
-    if (keywordFunction) {
-      console.log('[Controller] Found keyword for token ' + tokenId);
-      let session = agentContext.tokenSessions[tokenId]
+    try{
+      //const keywordDir = agentContext.properties['keyworddir'];
+      var kwDir = path.resolve(keywordPackageFile+"/keywords");
 
-      if (!session) session = {}
+      console.log('[Controller] Search keyword file in ' + kwDir + ' for token ' + tokenId)
 
-      console.log('[Controller] Executing keyword ' + keywordName + ' on token ' + tokenId)
-      await keywordFunction(argument, outputBuilder, session).catch(function (e) {
-        console.log('[Controller] Keyword execution failed: ' + e)
-        outputBuilder.fail(e)
-      })
+      var keywordFunction = searchAndRequireKeyword(kwDir, keywordName);
 
-      console.log('[Controller] Keyword successfully executed on token ' + tokenId)
-    } else {
-      outputBuilder.fail('Unable to find keyword ' + keywordName)
+      if (keywordFunction) {
+        console.log('[Controller] Found keyword for token ' + tokenId);
+        let session = agentContext.tokenSessions[tokenId]
+
+        if (!session) session = {}
+
+        console.log('[Controller] Executing keyword ' + keywordName + ' on token ' + tokenId)
+        await keywordFunction(argument, outputBuilder, session).catch(function (e) {
+          //console.log('[Controller] Keyword execution failed: ' + e.stack)
+          outputBuilder.fail(e)
+        })
+
+        console.log('[Controller] Keyword successfully executed on token ' + tokenId)
+      }
+      else {
+        outputBuilder.fail('Unable to find keyword ' + keywordName)
+      }
+    } catch (e) {
+      outputBuilder.fail('An error occured while attempting to execute the keyword ' + keywordName + '. Exception was: ' + JSON.stringify(e))
     }
   }
 
