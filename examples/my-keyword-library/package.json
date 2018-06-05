@@ -13,7 +13,7 @@
   "dependencies": {
     "npm": "^5.7.1",
     "selenium-webdriver": "^3.6.0",
-    "step-node-agent": "^0.9.3"
+    "step-node-agent": "^0.9.5"
   },
   "devDependencies": {
     "eslint": "^4.18.2",
