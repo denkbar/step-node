@@ -44,7 +44,7 @@ module.exports = function Controller (agentContext, fileManager) {
 
       filepathPromise.then(function (keywordPackageFile) {
         console.log('[Controller] Executing keyword ' + keywordName + ' using filepath ' + keywordPackageFile)
-        exports.executeKeyword(keywordName, keywordPackageFile, tokenId, argument, outputBuilder, agentContext)
+        exports.executeKeyword(keywordName, keywordPackageFile, tokenId, argument, properties, outputBuilder, agentContext)
       }, function (err) {
         console.log('[Controller] Error while attempting to run keyword ' + keywordName + ' :' + err)
       })
@@ -53,7 +53,7 @@ module.exports = function Controller (agentContext, fileManager) {
     }
   }
 
-  exports.executeKeyword = async function (keywordName, keywordPackageFile, tokenId, argument, outputBuilder, agentContext) {
+  exports.executeKeyword = async function (keywordName, keywordPackageFile, tokenId, argument, properties, outputBuilder, agentContext) {
 
     try{
       //const keywordDir = agentContext.properties['keyworddir'];
@@ -70,7 +70,7 @@ module.exports = function Controller (agentContext, fileManager) {
         if (!session) session = {}
 
         console.log('[Controller] Executing keyword ' + keywordName + ' on token ' + tokenId)
-        await keywordFunction(argument, outputBuilder, session).catch(function (e) {
+        await keywordFunction(argument, outputBuilder, session, properties).catch(function (e) {
           //console.log('[Controller] Keyword execution failed: ' + e.stack)
           outputBuilder.fail(e)
         })

@@ -1,6 +1,6 @@
-exports.Echo = async (input, output, session) => {
+exports.Echo = async (input, output, session, properties) => {
 
   //throw new Error("some type of error.");
-
+  input['properties'] = properties;
   output.send(input)
 }

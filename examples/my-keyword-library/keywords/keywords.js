@@ -9,14 +9,16 @@ exports.Open_Chrome = async (input, output, session) => {
   output.send({ result: 'OK' })
 }
 
-exports.Google_Search = async (input, output, session) => {
+exports.Google_Search = async (input, output, session, properties) => {
+  var googleUrl = properties['google.url'];
+
   try {
     const webdriver = require('selenium-webdriver')
     const { By } = webdriver
     const driver = session.driver
 
     session.driver = driver
-    await driver.get('http://www.google.com/ncr')
+    await driver.get(googleUrl)
     await driver.findElement(By.name('q')).sendKeys(input.search + webdriver.Key.ENTER)
 
     const data = await driver.takeScreenshot()

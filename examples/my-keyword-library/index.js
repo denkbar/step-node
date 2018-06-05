@@ -1,4 +1,4 @@
-const runner = require('step-node-agent').runner()
+const runner = require('step-node-agent').runner({'google.url':'http://www.google.com/ncr'})
 const assert = require('assert')
 
 ;(async () => {
