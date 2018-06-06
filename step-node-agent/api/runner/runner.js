@@ -1,4 +1,4 @@
-module.exports = function (properties) {
+module.exports = function (properties = {}) {
   const tokenId = 'local'
 
   const agentContext = {tokens: [], tokenSessions: {}, properties: properties}
