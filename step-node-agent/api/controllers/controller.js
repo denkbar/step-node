@@ -23,8 +23,20 @@ module.exports = function Controller (agentContext, fileManager) {
 
   exports.releaseToken_ = function (tokenId) {
     console.log('[Controller] Releasing token: ' + tokenId)
+    
+    let session = agentContext.tokenSessions[tokenId]
+    if (session){
+        // call close() for each closeable object in the session:
+    	Object.entries(session).forEach(function(element) {
+    		if (typeof element[1]['close'] == 'function') {
+    			console.log('[Controller] Closing closeable object \''+element[0]+'\' for token: ' + tokenId)
+    			element[1].close();
+    		}
+    	});
+    } else {
+    	console.log('[Controller] No session founds for token: ' + tokenId)
+    }
   }
-
   exports.process = function (req, res) {
     const tokenId = req.params.tokenId
     const keywordName = req.body.function
@@ -70,12 +82,25 @@ module.exports = function Controller (agentContext, fileManager) {
         if (!session) session = {}
 
         console.log('[Controller] Executing keyword ' + keywordName + ' on token ' + tokenId)
-        await keywordFunction(argument, outputBuilder, session, properties).catch(function (e) {
-          //console.log('[Controller] Keyword execution failed: ' + e.stack)
-          outputBuilder.fail(e)
-        })
-
-        console.log('[Controller] Keyword successfully executed on token ' + tokenId)
+        
+        try {
+        	await keywordFunction(argument, outputBuilder, session, properties)
+            console.log('[Controller] Keyword successfully executed on token ' + tokenId)
+        } catch(e) {
+        	var onError = searchAndRequireKeyword(kwDir, "onError");
+        	if (onError) {
+        		if (await onError(e)) {
+                    console.log('[Controller] Keyword execution failed and the onError function returned \'true\' on token ' + tokenId)
+                    outputBuilder.fail(e)
+        		} else {
+                  console.log('[Controller] Keyword execution failed but the onError function returned \'false\' on token ' + tokenId)
+        		  outputBuilder.send();
+        		}
+        	} else {
+                console.log('[Controller] Keyword execution failed and no onError function found on token ' + tokenId)
+        		outputBuilder.fail(e)
+        	}
+        }
       }
       else {
         outputBuilder.fail('Unable to find keyword ' + keywordName)
