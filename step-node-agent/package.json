@@ -14,7 +14,7 @@
   "license": "AGPL-3.0",
   "repository": {
     "type": "git",
-    "url": "git@github.com:denkbar/step-node.git"
+    "url": "git@github.com:exense/step-node.git"
   },
   "devDependencies": {
     "eslint": "^4.18.2",
