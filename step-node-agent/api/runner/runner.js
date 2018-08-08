@@ -4,10 +4,10 @@ module.exports = function (properties = {}) {
   const agentContext = {tokens: [], tokenSessions: {}, properties: properties}
   agentContext.tokenSessions[tokenId] = {}
 
-  var fileManager =  {
-    loadOrGetKeywordFile: function(url, fileId, fileVersion, keywordName) {
+  var fileManager = {
+    loadOrGetKeywordFile: function (url, fileId, fileVersion, keywordName) {
       return new Promise(function (resolve, reject) {
-        resolve(".");
+        resolve('.')
       })
     }
   }

@@ -1,6 +1,5 @@
 'use strict'
 module.exports = function (app, agentContext) {
-
   const Controller = require('../controllers/controller')
   const FileManager = require('../filemanager/filemanager')
   const controller = new Controller(agentContext, new FileManager(agentContext))

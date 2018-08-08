@@ -1,8 +1,9 @@
 const minimist = require('minimist')
+const path = require('path')
 
 let args = minimist(process.argv.slice(2), {
   default: {
-    f: __dirname + '/AgentConf.json'
+    f: path.join(__dirname, 'AgentConf.json')
   }
 })
 console.log('[Agent] Using arguments ' + args)

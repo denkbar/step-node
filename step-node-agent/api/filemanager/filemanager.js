@@ -5,13 +5,13 @@ module.exports = function FileManager (agentContext) {
   const unzip = require('unzip2')
 
   let exports = {}
-  const filemanagerPath = agentContext.properties['filemanagerPath']?agentContext.properties['filemanagerPath']:'filemanager'
+  const filemanagerPath = agentContext.properties['filemanagerPath'] ? agentContext.properties['filemanagerPath'] : 'filemanager'
   const workingDir = filemanagerPath + '/work/'
   console.log('[FileManager] Starting file manager using working directory: ' + workingDir)
 
   console.log('[FileManager] Clearing working dir: ' + workingDir)
   shell.rm('-rf', workingDir)
-  shell.mkdir('-p', workingDir);
+  shell.mkdir('-p', workingDir)
 
   let filemanagerMap = {}
 
