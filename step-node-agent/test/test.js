@@ -6,3 +6,9 @@ const assert = require('assert')
   assert.equal(output.payload.Param1, 'Val1')
   assert.equal(output.payload.properties.Property1, 'Prop1')
 })()
+
+;(async () => {
+  const errorMsg = 'My Error';
+  const output = await runner.run('ErrorTestKW', {ErrorMsg:errorMsg})
+  assert.equal(output.error, errorMsg)
+})()
