@@ -18,15 +18,17 @@ console.log('[Agent] Creating agent context and tokens')
 const uuid = require('uuid/v4')
 const _ = require('underscore')
 const agent = {id: uuid()}
-let agentContext = {tokens: [], tokenSessions: [], properties: agentConf.properties, controllerUrl: agentConf.gridHost}
+let agentContext = { tokens: [], tokenSessions: [], tokenProperties: [], properties: agentConf.properties, controllerUrl: agentConf.gridHost }
 _.each(agentConf.tokenGroups, function (tokenGroup) {
   const tokenConf = tokenGroup.tokenConf
   let attributes = tokenConf.attributes
+  let additionalProperties = tokenConf.properties
   attributes['$agenttype'] = 'node'
   for (let i = 0; i < tokenGroup.capacity; i++) {
     const token = { id: uuid(), agentid: agent.id, attributes: attributes, selectionPatterns: {} }
     agentContext.tokens.push(token)
     agentContext.tokenSessions[token.id] = {}
+    agentContext.tokenProperties[token.id] = additionalProperties
   }
 })
 

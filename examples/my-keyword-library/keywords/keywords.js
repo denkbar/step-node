@@ -5,37 +5,43 @@ exports.Open_Chrome = async (input, output, session) => {
     .forBrowser('chrome')
     .build()
 
-  session.driver = driver
-  output.send({ result: 'OK' })
+  session.driver_wraper = { 'driver': driver, 'close': function() {
+	  console.log('[Driver wrapper] Closing selenium driver')
+	  this.driver.quit()
+  } }
+  
+    output.send({ result: 'OK' })
 }
 
 exports.Google_Search = async (input, output, session, properties) => {
   var googleUrl = properties['google.url'];
 
-  try {
-    const webdriver = require('selenium-webdriver')
-    const { By } = webdriver
-    const driver = session.driver
+  const webdriver = require('selenium-webdriver')
+  const { By } = webdriver
+  const driver = session.driver_wraper.driver
 
-    session.driver = driver
-    await driver.get(googleUrl)
-    await driver.findElement(By.name('q')).sendKeys(input.search + webdriver.Key.ENTER)
+  session.driver_wraper.driver = driver
+  await driver.get(googleUrl)
+  await driver.findElement(By.name('q')).sendKeys(input.search + webdriver.Key.ENTER)
 
-    const data = await driver.takeScreenshot()
-    output.attach({ name: 'screenshot.png', hexContent: data })
-    output.send({ result: 'OK' })
-  } catch (e) {
-    output.fail(e)
-  }
+  const data = await driver.takeScreenshot()
+  output.attach({ name: 'screenshot.png', hexContent: data })
+  output.send({ result: 'OK' })
 }
 
 exports.Close_Chrome = async (input, output, session) => {
-  try {
-    const driver = session.driver
-    driver.quit()
+  const driver = session.driver_wraper.driver
+  driver.quit()
 
-    output.send({ result: 'OK' })
-  } catch (e) {
-    output.fail(e)
-  }
+  output.send({ result: 'OK' })
+}
+
+exports.onError = async (exception, input, output, session, properties) => {
+	
+	if (session.driver_wraper) {
+		const data = await session.driver_wraper.driver.takeScreenshot()
+		output.attach({ name: 'screenshot_onError.png', hexContent: data })
+	}
+	
+	return true
 }

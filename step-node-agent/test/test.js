@@ -8,7 +8,12 @@ const assert = require('assert')
 })()
 
 ;(async () => {
-  const errorMsg = 'My Error'
-  const output = await runner.run('ErrorTestKW', {ErrorMsg: errorMsg})
-  assert.equal(output.error, errorMsg)
+  const errorMsg1 = 'Error - rethrow'
+  const output1 = await runner.run('ErrorTestKW', {ErrorMsg: errorMsg1, rethrow_error: true})
+  assert.equal(output1.error, errorMsg1)
+
+  const errorMsg2 = 'Error - do not rethrow'
+  const output2 = await runner.run('ErrorTestKW', {ErrorMsg: errorMsg2, rethrow_error: false})
+
+  assert.equal(output2.error, undefined)
 })()

@@ -43,6 +43,12 @@ module.exports = function Controller (agentContext, fileManager) {
     const argument = req.body.argument
     const properties = req.body.properties
 
+    // add the properties of the tokenGroup
+    let additionalProperties = agentContext.tokenProperties[tokenId]
+    Object.entries(additionalProperties).forEach(function (element) {
+      properties[element[0]] = element[1]
+    })
+
     exports.process_(tokenId, keywordName, argument, properties, function (payload) {
       res.json(payload)
     })
@@ -67,7 +73,6 @@ module.exports = function Controller (agentContext, fileManager) {
 
   exports.executeKeyword = async function (keywordName, keywordPackageFile, tokenId, argument, properties, outputBuilder, agentContext) {
     try {
-      // const keywordDir = agentContext.properties['keyworddir'];
       var kwDir = path.resolve(keywordPackageFile + '/keywords')
 
       console.log('[Controller] Search keyword file in ' + kwDir + ' for token ' + tokenId)
@@ -88,15 +93,15 @@ module.exports = function Controller (agentContext, fileManager) {
         } catch (e) {
           var onError = searchAndRequireKeyword(kwDir, 'onError')
           if (onError) {
-            if (await onError(e)) {
-              console.log('[Controller] Keyword execution failed and the onError function returned \'true\' on token ' + tokenId)
+            if (await onError(e, argument, outputBuilder, session, properties)) {
+              console.log('[Controller] Keyword execution marked as failed: onError function returned \'true\' on token ' + tokenId)
               outputBuilder.fail(e)
             } else {
-              console.log('[Controller] Keyword execution failed but the onError function returned \'false\' on token ' + tokenId)
+              console.log('[Controller] Keyword execution marked as successful: execution failed but the onError function returned \'false\' on token ' + tokenId)
               outputBuilder.send()
             }
           } else {
-            console.log('[Controller] Keyword execution failed and no onError function found on token ' + tokenId)
+            console.log('[Controller] Keyword execution marked as failed: Keyword execution failed and no onError function found on token ' + tokenId)
             outputBuilder.fail(e)
           }
         }
