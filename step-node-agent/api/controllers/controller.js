@@ -1,4 +1,8 @@
 module.exports = function Controller (agentContext, fileManager) {
+  process.on('unhandledRejection', error => {
+    console.log('[Controller] Critical: an unhandled error (unhandled promise rejection) occured and might not have been reported', error)
+  })
+
   let exports = {}
 
   const fs = require('fs')
