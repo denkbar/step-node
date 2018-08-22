@@ -23,5 +23,8 @@ const assert = require('assert')
   output = await runner.run('ErrorRejectedPromiseTestKW', {Param1: 'Val1'})
   assert.equal(output.error, undefined)
 
+  output = await runner.run('ErrorUncaughtExceptionTestKW', {Param1: 'Val1'})
+  assert.equal(output.error, undefined)
+
   console.log('PASSED')
 })()

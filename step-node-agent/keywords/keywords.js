@@ -12,6 +12,13 @@ exports.ErrorRejectedPromiseTestKW = async (input, output, session, properties) 
   output.send()
 }
 
+exports.ErrorUncaughtExceptionTestKW = async (input, output, session, properties) => {
+  process.nextTick(function () {
+    throw new Error()
+  })
+  output.send()
+}
+
 exports.onError = async (exception, input, output, session, properties) => {
   console.log('[onError] Exception is: \'' + exception + '\'')
   global.isOnErrorCalled = true
