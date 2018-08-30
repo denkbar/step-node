@@ -13,6 +13,10 @@ exports.Open_Chrome = async (input, output, session) => {
     output.send({ result: 'OK' })
 }
 
+exports.Sleep  = async (input, output, session, properties) => {
+  setTimeout(function(){output.send()}, input['ms'])
+}
+
 exports.Google_Search = async (input, output, session, properties) => {
   var googleUrl = properties['google.url'];
 

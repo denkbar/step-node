@@ -51,6 +51,8 @@ module.exports = function Controller (agentContext, fileManager) {
     const argument = req.body.argument
     const properties = req.body.properties
 
+    console.log('[Controller] Using token: ' + tokenId + ' to execute ' + keywordName)
+
     // add the properties of the tokenGroup
     let additionalProperties = agentContext.tokenProperties[tokenId]
     Object.entries(additionalProperties).forEach(function (element) {
@@ -63,7 +65,10 @@ module.exports = function Controller (agentContext, fileManager) {
   }
 
   exports.process_ = function (tokenId, keywordName, argument, properties, callback) {
-    const outputBuilder = new OutputBuilder(callback)
+    const outputBuilder = new OutputBuilder(function (output) {
+      console.log(`[Controller] Keyword ${keywordName} successfully executed on token ${tokenId}`)
+      callback(output)
+    })
 
     try {
       const filepathPromise = exports.filemanager.loadOrGetKeywordFile(agentContext.controllerUrl + '/grid/file/', properties['$node.js.file.id'], properties['$node.js.file.version'], keywordName)
@@ -97,7 +102,6 @@ module.exports = function Controller (agentContext, fileManager) {
 
         try {
           await keywordFunction(argument, outputBuilder, session, properties)
-          console.log('[Controller] Keyword successfully executed on token ' + tokenId)
         } catch (e) {
           var onError = searchAndRequireKeyword(kwDir, 'onError')
           if (onError) {

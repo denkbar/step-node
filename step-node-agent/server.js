@@ -36,6 +36,7 @@ console.log('[Agent] Starting agent services')
 const express = require('express')
 const app = express()
 const port = agentConf.agentPort || 3000
+const timeout = agentConf.agentServerTimeout || 600000
 const bodyParser = require('body-parser')
 
 app.use(bodyParser.urlencoded({extended: true}))
@@ -44,7 +45,8 @@ app.use(bodyParser.json())
 const routes = require('./api/routes/routes')
 routes(app, agentContext)
 
-app.listen(port)
+var server = app.listen(port)
+server.setTimeout(timeout)
 
 const os = require('os')
 const agentServicesUrl = agentConf.agentUrl || 'http://' + os.hostname() + ':' + port
