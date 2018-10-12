@@ -17,13 +17,14 @@ const agentConf = JSON.parse(content)
 console.log('[Agent] Creating agent context and tokens')
 const uuid = require('uuid/v4')
 const _ = require('underscore')
+const agentType = 'node'
 const agent = {id: uuid()}
 let agentContext = { tokens: [], tokenSessions: [], tokenProperties: [], properties: agentConf.properties, controllerUrl: agentConf.gridHost }
 _.each(agentConf.tokenGroups, function (tokenGroup) {
   const tokenConf = tokenGroup.tokenConf
   let attributes = tokenConf.attributes
   let additionalProperties = tokenConf.properties
-  attributes['$agenttype'] = 'node'
+  attributes['$agenttype'] = agentType
   for (let i = 0; i < tokenGroup.capacity; i++) {
     const token = { id: uuid(), agentid: agent.id, attributes: attributes, selectionPatterns: {} }
     agentContext.tokens.push(token)
@@ -60,7 +61,7 @@ setInterval(function () {
     uri: agentConf.gridHost + '/grid/register',
     method: 'POST',
     json: true,
-    body: { agentRef: { agentId: agent.id, agentUrl: agentServicesUrl }, tokens: agentContext.tokens }
+    body: { agentRef: { agentId: agent.id, agentUrl: agentServicesUrl, agentType: agentType }, tokens: agentContext.tokens }
   }, function (err, res, body) {
     if (err) {
       console.log(err)
