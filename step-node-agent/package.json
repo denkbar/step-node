@@ -17,14 +17,14 @@
     "url": "git@github.com:exense/step-node.git"
   },
   "devDependencies": {
-    "eslint": "^4.18.2",
+    "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-promise": "^3.7.0",
-    "eslint-plugin-standard": "^3.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
     "husky": "^0.14.3",
-    "nodemon": "^1.18.6"
+    "nodemon": "^1.18.7"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -34,8 +34,8 @@
     "request": "^2.85.0",
     "shelljs": "^0.8.1",
     "underscore": "^1.8.3",
-    "unzip2": "^0.2.5",
-    "uuid": "^3.1.0"
+    "uuid": "^3.1.0",
+    "unzip-stream": "^0.3.0"
   },
   "bundledDependencies": [
     "body-parser",
@@ -45,7 +45,6 @@
     "request",
     "shelljs",
     "underscore",
-    "unzip2",
     "uuid"
   ],
   "bin": {
