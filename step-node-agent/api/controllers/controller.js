@@ -47,9 +47,9 @@ module.exports = function Controller (agentContext, fileManager) {
   }
   exports.process = function (req, res) {
     const tokenId = req.params.tokenId
-    const keywordName = req.body.function
-    const argument = req.body.argument
-    const properties = req.body.properties
+    const keywordName = req.body.payload.function
+    const argument = req.body.payload.payload
+    const properties = req.body.payload.properties
 
     console.log('[Controller] Using token: ' + tokenId + ' to execute ' + keywordName)
 

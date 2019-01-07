@@ -44,11 +44,12 @@ module.exports = function FileManager (agentContext) {
         shell.mkdir('-p', filePath)
         console.log('[FileManager] Created file path: ' + filePath + ' for fileId ' + fileId)
 
-        console.log('[FileManager] Requesting file from: ' + controllerUrl + fileId)
-        const filenamePromise = getKeywordFile(controllerUrl + fileId, filePath)
+        var fileVersionUrl = controllerUrl + fileId + '/' + fileVersionId
+        console.log('[FileManager] Requesting file from: ' + fileVersionUrl)
+        const filenamePromise = getKeywordFile(fileVersionUrl, filePath)
 
         filenamePromise.then(function (result) {
-          console.log('[FileManager] Transfered file ' + result + ' from ' + controllerUrl + fileId)
+          console.log('[FileManager] Transfered file ' + result + ' from ' + fileVersionUrl)
 
           let cacheEntry = getCacheEntry(fileId, fileVersionId)
           cacheEntry.name = result

@@ -19,7 +19,7 @@ module.exports = function (properties = {}) {
 
   api.run = function (keywordName, input) {
     return new Promise(resolve => {
-      controller.process_(tokenId, keywordName, input, properties, function (output) { resolve(output) })
+      controller.process_(tokenId, keywordName, input, properties, function (output) { resolve(output.payload) })
     })
   }
 

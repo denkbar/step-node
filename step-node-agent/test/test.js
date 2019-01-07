@@ -10,7 +10,7 @@ const assert = require('assert')
 
   const errorMsg1 = 'Error - rethrow'
   const output1 = await runner.run('ErrorTestKW', {ErrorMsg: errorMsg1, rethrow_error: true})
-  assert.equal(output1.error, errorMsg1)
+  assert.equal(output1.error.msg, errorMsg1)
   assert.equal(global.isOnErrorCalled, true)
 
   global.isOnErrorCalled = false
