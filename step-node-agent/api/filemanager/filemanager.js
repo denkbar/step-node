@@ -2,7 +2,7 @@ module.exports = function FileManager (agentContext) {
   const fs = require('fs')
   const shell = require('shelljs')
   const http = require('http')
-  const unzip = require("unzip-stream");
+  const unzip = require('unzip-stream')
 
   let exports = {}
   const filemanagerPath = agentContext.properties['filemanagerPath'] ? agentContext.properties['filemanagerPath'] : 'filemanager'

@@ -53,6 +53,12 @@ module.exports = function Controller (agentContext, fileManager) {
 
     console.log('[Controller] Using token: ' + tokenId + ' to execute ' + keywordName)
 
+    // add the agent properties
+    let agentProperties = agentContext.properties
+    Object.entries(agentProperties).forEach(function (element) {
+      properties[element[0]] = element[1]
+    })
+
     // add the properties of the tokenGroup
     let additionalProperties = agentContext.tokenProperties[tokenId]
     Object.entries(additionalProperties).forEach(function (element) {

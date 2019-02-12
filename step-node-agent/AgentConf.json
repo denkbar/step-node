@@ -7,11 +7,13 @@
       "capacity": 10,
       "tokenConf": {
         "attributes": {},
-        "properties": {}
+        "properties": {"myProp1":"myProp1"}
       }
     }
   ],
   "properties": {
-    "filemanagerPath": "C:/tmp/"
+    "myProp1":"myDefaultValue",
+    "myProp2":"myValue2",
+    "keywords": "keywords/keywords.js;"
   }
 }
