@@ -15,6 +15,24 @@ module.exports = function FileManager (agentContext) {
 
   let filemanagerMap = {}
 
+  exports.isFirstLevelKeywordFolder = function (path) {
+    if (fs.existsSync(path + '/keywords')) {
+      return true
+    }
+    return false
+  }
+
+  exports.getFolderName = function (keywordPackageFile){
+    try{
+      let splitNodes = keywordPackageFile.split('/');
+      let lastNode = splitNodes[splitNodes.length - 1];
+      let splitExt = lastNode.split('.');
+      return splitExt[0];
+    }catch(e){
+      throw 'A problem occured while attempting to retrieve subfolder name from zipped project:' + keywordPackageFile;
+    }
+  }
+
   exports.loadOrGetKeywordFile = function (controllerUrl, fileId, fileVersionId) {
     return new Promise(function (resolve, reject) {
       const filePath = workingDir + fileId + '/' + fileVersionId

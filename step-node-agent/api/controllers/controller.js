@@ -1,4 +1,4 @@
-module.exports = function Controller (agentContext, fileManager) {
+module.exports = function Controller(agentContext, fileManager) {
   process.on('unhandledRejection', error => {
     console.log('[Controller] Critical: an unhandled error (unhandled promise rejection) occured and might not have been reported', error)
   })
@@ -90,10 +90,19 @@ module.exports = function Controller (agentContext, fileManager) {
     }
   }
 
+  
+
   exports.executeKeyword = async function (keywordName, keywordPackageFile, tokenId, argument, properties, outputBuilder, agentContext) {
     try {
-      var kwDir = path.resolve(keywordPackageFile + '/keywords')
+      var kwDir;
 
+      if (keywordPackageFile.toUpperCase().endsWith('ZIP')) {
+        if (exports.filemanager.isFirstLevelKeywordFolder()) {
+          kwDir = path.resolve(keywordPackageFile + '/keywords')
+        } else {
+          kwDir =path.resolve(keywordPackageFile + '/' + exports.filemanager.getFolderName(keywordPackageFile) + '/keywords');
+        }
+      }
       console.log('[Controller] Search keyword file in ' + kwDir + ' for token ' + tokenId)
 
       var keywordFunction = searchAndRequireKeyword(kwDir, keywordName)
@@ -124,10 +133,10 @@ module.exports = function Controller (agentContext, fileManager) {
           }
         }
       } else {
-        outputBuilder.fail('Unable to find keyword ' + keywordName)
+        outputBuilder.failWithMessage('Unable to find keyword ' + keywordName, e)
       }
     } catch (e) {
-      outputBuilder.fail('An error occured while attempting to execute the keyword ' + keywordName + '. Exception was: ' + JSON.stringify(e))
+      outputBuilder.failWithMessage('An error occured while attempting to execute the keyword ' + keywordName, e)
     }
   }
 
