@@ -84,7 +84,7 @@ module.exports = function FileManager (agentContext) {
       http.get(controllerFileUrl, (resp) => {
         const filename = parseName(resp.headers)
         const filepath = targetDir + '/' + filename
-        if (isDir(resp.headers)) {
+        if (isDir(resp.headers) || filename.toUpperCase().endsWith('ZIP')) {
           resp.pipe(unzip.Extract({path: filepath})).on('close', () => resolve(filename))
         } else {
           const myFile = fs.createWriteStream(filepath)
