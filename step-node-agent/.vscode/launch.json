@@ -15,7 +15,7 @@
             "sourceMaps": false,
             "outDir": null,
             "localRoot": "${workspaceRoot}",
-            "remoteRoot": null
+            "remoteRoot": "${workspaceRoot}"
         }
     ]
 }
