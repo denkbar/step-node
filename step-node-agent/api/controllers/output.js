@@ -1,4 +1,4 @@
-module.exports = function OutputBuilder(callback) {
+module.exports = function OutputBuilder (callback) {
   let exports = {}
 
   exports.builder = { payload: { attachments: [], payload: {} }, attachments: [] }
@@ -16,7 +16,7 @@ module.exports = function OutputBuilder(callback) {
 
   exports.dealWithExceptionObject = function (e) {
     if (e instanceof Error) {
-      exports.builder.payload.error = exports.buildDefaultTechnicalError('['+e.name+'] '+e.message)
+      exports.builder.payload.error = exports.buildDefaultTechnicalError('[' + e.name + '] ' + e.message)
       exports.attach(
         {
           'name': 'exception.log',
@@ -32,7 +32,7 @@ module.exports = function OutputBuilder(callback) {
   }
 
   exports.failWithException = function (e) {
-    exports.dealWithExceptionObject(e);
+    exports.dealWithExceptionObject(e)
     if (callback) {
       callback(exports.builder)
     }
@@ -45,7 +45,7 @@ module.exports = function OutputBuilder(callback) {
     }
   }
 
-  exports.failWithMessageAndException = function(msg, e) {
+  exports.failWithMessageAndException = function (msg, e) {
     exports.dealWithExceptionObject(e)
     exports.builder.payload.error.msg = msg + '. Message was: ' + exports.builder.payload.error.msg
     if (callback) {

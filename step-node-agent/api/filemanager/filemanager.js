@@ -22,14 +22,14 @@ module.exports = function FileManager (agentContext) {
     return false
   }
 
-  exports.getFolderName = function (keywordPackageFile){
-    try{
-      let splitNodes = keywordPackageFile.split('/');
-      let lastNode = splitNodes[splitNodes.length - 1];
-      let splitExt = lastNode.split('.');
-      return splitExt[0];
-    }catch(e){
-      throw 'A problem occured while attempting to retrieve subfolder name from zipped project:' + keywordPackageFile;
+  exports.getFolderName = function (keywordPackageFile) {
+    try {
+      let splitNodes = keywordPackageFile.split('/')
+      let lastNode = splitNodes[splitNodes.length - 1]
+      let splitExt = lastNode.split('.')
+      return splitExt[0]
+    } catch (e) {
+      throw new Error('A problem occured while attempting to retrieve subfolder name from zipped project:' + keywordPackageFile)
     }
   }
 

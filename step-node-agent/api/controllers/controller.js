@@ -1,4 +1,4 @@
-module.exports = function Controller(agentContext, fileManager) {
+module.exports = function Controller (agentContext, fileManager) {
   process.on('unhandledRejection', error => {
     console.log('[Controller] Critical: an unhandled error (unhandled promise rejection) occured and might not have been reported', error)
   })
@@ -139,7 +139,7 @@ module.exports = function Controller(agentContext, fileManager) {
     }
   }
 
-  function searchAndRequireKeyword(kwDir, keywordName) {
+  function searchAndRequireKeyword (kwDir, keywordName) {
     var keywordFunction
     var kwFiles = fs.readdirSync(kwDir)
     kwFiles.every(function (kwFile) {
