@@ -86,23 +86,22 @@ module.exports = function Controller(agentContext, fileManager) {
         console.log('[Controller] Error while attempting to run keyword ' + keywordName + ' :' + err)
       })
     } catch (e) {
-      outputBuilder.fail(e)
+      outputBuilder.failWithException(e)
     }
   }
 
-  
-
   exports.executeKeyword = async function (keywordName, keywordPackageFile, tokenId, argument, properties, outputBuilder, agentContext) {
     try {
-      var kwDir;
+      var kwDir
 
       if (keywordPackageFile.toUpperCase().endsWith('ZIP')) {
-        if (exports.filemanager.isFirstLevelKeywordFolder()) {
+        if (exports.filemanager.isFirstLevelKeywordFolder(keywordPackageFile)) {
           kwDir = path.resolve(keywordPackageFile + '/keywords')
         } else {
-          kwDir =path.resolve(keywordPackageFile + '/' + exports.filemanager.getFolderName(keywordPackageFile) + '/keywords');
+          kwDir = path.resolve(keywordPackageFile + '/' + exports.filemanager.getFolderName(keywordPackageFile) + '/keywords')
         }
       }
+
       console.log('[Controller] Search keyword file in ' + kwDir + ' for token ' + tokenId)
 
       var keywordFunction = searchAndRequireKeyword(kwDir, keywordName)
@@ -122,25 +121,25 @@ module.exports = function Controller(agentContext, fileManager) {
           if (onError) {
             if (await onError(e, argument, outputBuilder, session, properties)) {
               console.log('[Controller] Keyword execution marked as failed: onError function returned \'true\' on token ' + tokenId)
-              outputBuilder.fail(e)
+              outputBuilder.failWithException(e)
             } else {
               console.log('[Controller] Keyword execution marked as successful: execution failed but the onError function returned \'false\' on token ' + tokenId)
               outputBuilder.send()
             }
           } else {
             console.log('[Controller] Keyword execution marked as failed: Keyword execution failed and no onError function found on token ' + tokenId)
-            outputBuilder.fail(e)
+            outputBuilder.failWithException(e)
           }
         }
       } else {
-        outputBuilder.failWithMessage('Unable to find keyword ' + keywordName, e)
+        outputBuilder.failWithMessage('Unable to find keyword ' + keywordName)
       }
     } catch (e) {
-      outputBuilder.failWithMessage('An error occured while attempting to execute the keyword ' + keywordName, e)
+      outputBuilder.failWithMessageAndException('An error occured while attempting to execute the keyword ' + keywordName, e)
     }
   }
 
-  function searchAndRequireKeyword (kwDir, keywordName) {
+  function searchAndRequireKeyword(kwDir, keywordName) {
     var keywordFunction
     var kwFiles = fs.readdirSync(kwDir)
     kwFiles.every(function (kwFile) {
