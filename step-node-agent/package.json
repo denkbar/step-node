@@ -31,11 +31,12 @@
     "express": "^4.16.2",
     "http": "0.0.0",
     "minimist": "^1.2.0",
+    "npm": "^6.9.0",
     "request": "^2.85.0",
     "shelljs": "^0.8.1",
     "underscore": "^1.8.3",
-    "uuid": "^3.1.0",
-    "unzip-stream": "^0.3.0"
+    "unzip-stream": "^0.3.0",
+    "uuid": "^3.1.0"
   },
   "bundledDependencies": [
     "body-parser",
