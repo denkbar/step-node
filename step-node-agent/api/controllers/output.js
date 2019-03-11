@@ -10,47 +10,47 @@ module.exports = function OutputBuilder (callback) {
     }
   }
 
-  exports.buildDefaultTechnicalError = function (message) {
+  function buildDefaultTechnicalError (message) {
     return { msg: message, type: 'TECHNICAL', root: true, code: 0 }
   }
 
-  exports.dealWithExceptionObject = function (e) {
-    if (e instanceof Error) {
-      exports.builder.payload.error = exports.buildDefaultTechnicalError('[' + e.name + '] ' + e.message)
-      exports.attach(
-        {
-          'name': 'exception.log',
-          'isDirectory': false,
-          'description': 'exception stacktrace from keyword',
-          'hexContent': Buffer.from(e.stack).toString('base64')
-        })
-    } else if (typeof e === 'object') {
-      exports.builder.payload.error = e
-    } else {
-      exports.builder.payload.error = exports.buildDefaultTechnicalError(e)
-    }
+  function buildDefaultBusinessError (message) {
+    return { msg: message, type: 'BUSINESS', root: true, code: 0 }
   }
 
-  exports.failWithException = function (e) {
-    exports.dealWithExceptionObject(e)
+  function attachException (e) {
+    exports.attach(
+      {
+        'name': 'exception.log',
+        'isDirectory': false,
+        'description': 'exception stacktrace from keyword',
+        'hexContent': Buffer.from(e.stack).toString('base64')
+      })
+  }
+
+  exports.fail = function (arg1, arg2) {
+    exports.setError(arg1, arg2)
     if (callback) {
       callback(exports.builder)
     }
   }
 
-  exports.failWithMessage = function (msg) {
-    exports.builder.payload.error = exports.buildDefaultTechnicalError(msg)
-    if (callback) {
-      callback(exports.builder)
+  exports.setError = function (arg1, arg2) {
+    if (typeof arg1 === 'string' || arg1 instanceof String) {
+      exports.builder.payload.error = buildDefaultTechnicalError(arg1)
+      if (arg2 && arg2 instanceof Error) {
+        attachException(arg2)
+      }
+    } else if (arg1 instanceof Error) {
+      exports.builder.payload.error = buildDefaultTechnicalError(arg1.message)
+      attachException(arg1)
+    } else if (typeof arg1 === 'object') {
+      exports.builder.payload.error = arg1
     }
   }
 
-  exports.failWithMessageAndException = function (msg, e) {
-    exports.dealWithExceptionObject(e)
-    exports.builder.payload.error.msg = msg + '. Message was: ' + exports.builder.payload.error.msg
-    if (callback) {
-      callback(exports.builder)
-    }
+  exports.setBusinessError = function (errorMessage) {
+    exports.builder.payload.error = buildDefaultBusinessError(errorMessage)
   }
 
   exports.attach = function (attachment) {

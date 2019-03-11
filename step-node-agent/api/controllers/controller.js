@@ -84,9 +84,10 @@ module.exports = function Controller (agentContext, fileManager) {
         exports.executeKeyword(keywordName, keywordPackageFile, tokenId, argument, properties, outputBuilder, agentContext)
       }, function (err) {
         console.log('[Controller] Error while attempting to run keyword ' + keywordName + ' :' + err)
+        outputBuilder.fail('Error while attempting to run keyword', err)
       })
     } catch (e) {
-      outputBuilder.failWithException(e)
+      outputBuilder.fail(e)
     }
   }
 
@@ -100,6 +101,9 @@ module.exports = function Controller (agentContext, fileManager) {
         } else {
           kwDir = path.resolve(keywordPackageFile + '/' + exports.filemanager.getFolderName(keywordPackageFile) + '/keywords')
         }
+      } else {
+        // Local execution with KeywordRunner
+        kwDir = path.resolve(keywordPackageFile + '/keywords')
       }
 
       console.log('[Controller] Search keyword file in ' + kwDir + ' for token ' + tokenId)
@@ -121,21 +125,21 @@ module.exports = function Controller (agentContext, fileManager) {
           if (onError) {
             if (await onError(e, argument, outputBuilder, session, properties)) {
               console.log('[Controller] Keyword execution marked as failed: onError function returned \'true\' on token ' + tokenId)
-              outputBuilder.failWithException(e)
+              outputBuilder.fail(e)
             } else {
               console.log('[Controller] Keyword execution marked as successful: execution failed but the onError function returned \'false\' on token ' + tokenId)
               outputBuilder.send()
             }
           } else {
             console.log('[Controller] Keyword execution marked as failed: Keyword execution failed and no onError function found on token ' + tokenId)
-            outputBuilder.failWithException(e)
+            outputBuilder.fail(e)
           }
         }
       } else {
-        outputBuilder.failWithMessage('Unable to find keyword ' + keywordName)
+        outputBuilder.fail('Unable to find keyword ' + keywordName)
       }
     } catch (e) {
-      outputBuilder.failWithMessageAndException('An error occured while attempting to execute the keyword ' + keywordName, e)
+      outputBuilder.fail('An error occured while attempting to execute the keyword ' + keywordName, e)
     }
   }
 
