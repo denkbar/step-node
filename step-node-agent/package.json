@@ -1,6 +1,6 @@
 {
   "name": "step-node-agent",
-  "version": "0.9.10",
+  "version": "0.9.10.1",
   "description": "The official STEP Agent implementation for Node.js",
   "main": "index.js",
   "scripts": {
@@ -45,7 +45,8 @@
     "request",
     "shelljs",
     "underscore",
-    "uuid"
+    "uuid",
+    "unzip-stream"
   ],
   "bin": {
     "step-node-agent": "./bin/step-node-agent"
