@@ -41,6 +41,7 @@ module.exports = function Controller (agentContext, fileManager) {
           element[1].close()
         }
       })
+      agentContext.tokenSessions[tokenId] = {}
     } else {
       console.log('[Controller] No session founds for token: ' + tokenId)
     }
